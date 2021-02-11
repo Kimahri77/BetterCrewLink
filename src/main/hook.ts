@@ -5,7 +5,6 @@ import { keyboardWatcher } from 'node-keyboard-watcher';
 import Store from 'electron-store';
 import { ISettings } from '../common/ISettings';
 import { IpcHandlerMessages, IpcRendererMessages, IpcSyncMessages } from '../common/ipc-messages';
-import { overlayWindow } from 'electron-overlay-window';
 
 const store = new Store<ISettings>();
 
@@ -89,15 +88,15 @@ ipcMain.handle(IpcHandlerMessages.START_HOOK, async (event) => {
 });
 
 ipcMain.on('reload', async () => {
-	global.mainWindow?.reload();
-	overlayWindow?.hide();
-	global.overlay?.reload();
-	setTimeout(
-		function () {
-			overlayWindow?.show();
-		}.bind(this),
-		1000
-	); // let it load fr a second
+	 global.mainWindow?.reload();
+	// overlayWindow?.hide();
+	// global.overlay?.reload();
+	// setTimeout(
+	// 	function () {
+	// 		overlayWindow?.show();
+	// 	}.bind(this),
+	// 	1000
+	// ); // let it load fr a second
 });
 
 const keycodeMap = {

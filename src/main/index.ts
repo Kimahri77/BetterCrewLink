@@ -1,7 +1,7 @@
 'use strict';
 
 import { autoUpdater } from 'electron-updater';
-import { app, BrowserWindow, ipcMain, session } from 'electron';
+import { app, BrowserWindow, ipcMain } from 'electron';
 import windowStateKeeper from 'electron-window-state';
 import { join as joinPath } from 'path';
 import { format as formatUrl } from 'url';
@@ -161,7 +161,7 @@ const gotTheLock = app.requestSingleInstanceLock();
 if (!gotTheLock) {
 	app.quit();
 } else {
-	autoUpdater.checkForUpdates();
+//	autoUpdater.checkForUpdates();
 	autoUpdater.on('update-available', () => {
 		try {
 			global.mainWindow?.webContents.send(IpcRendererMessages.AUTO_UPDATER_STATE, {
@@ -253,19 +253,19 @@ if (!gotTheLock) {
 			global.mainWindow = createMainWindow();
 		}
 
-		session.fromPartition('default').setPermissionRequestHandler((webContents, permission, callback) => {
-			const allowedPermissions = ['audioCapture']; // Full list here: https://developer.chrome.com/extensions/declare_permissions#manifest
-			console.log('permission requested ', permission);
-			if (allowedPermissions.includes(permission)) {
-				callback(true); // Approve permission request
-			} else {
-				console.error(
-					`The application tried to request permission for '${permission}'. This permission was not whitelisted and has been blocked.`
-				);
+		// session.fromPartition('default').setPermissionRequestHandler((webContents, permission, callback) => {
+		// 	const allowedPermissions = ['audioCapture']; // Full list here: https://developer.chrome.com/extensions/declare_permissions#manifest
+		// 	console.log('permission requested ', permission);
+		// 	if (allowedPermissions.includes(permission)) {
+		// 		callback(true); // Approve permission request
+		// 	} else {
+		// 		console.error(
+		// 			`The application tried to request permission for '${permission}'. This permission was not whitelisted and has been blocked.`
+		// 		);
 
-				callback(false); // Deny
-			}
-		});
+		// 		callback(false); // Deny
+		// 	}
+		// });
 	});
 
 	// create main BrowserWindow when electron is ready

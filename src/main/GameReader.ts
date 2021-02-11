@@ -90,6 +90,11 @@ export default class GameReader {
 			const meetingHudState =
 				meetingHud_cachePtr === 0 ? 4 : this.readMemory('int', meetingHud, this.offsets.meetingHudState, 4);
 
+			let exiledPlayerId = -99;
+			if (meetingHud_cachePtr != 0) {
+				exiledPlayerId = this.readMemory<number>('byte', this.gameAssembly.modBaseAddr, this.offsets.exiledPlayerId);
+			}
+
 			const innerNetClient = this.readMemory<number>('ptr', this.gameAssembly.modBaseAddr, this.offsets.innerNetClient);
 
 			const gameState = this.readMemory<number>('int', innerNetClient, this.offsets.gameState);
@@ -130,11 +135,6 @@ export default class GameReader {
 			const hostId = this.readMemory<number>('uint32', innerNetClient, this.offsets.hostId);
 			const clientId = this.readMemory<number>('uint32', innerNetClient, this.offsets.clientId);
 
-			const exiledPlayerId = this.readMemory<number>(
-				'byte',
-				this.gameAssembly.modBaseAddr,
-				this.offsets.exiledPlayerId
-			);
 			let impostors = 0,
 				crewmates = 0,
 				lightRadius = 1;
@@ -353,7 +353,7 @@ export default class GameReader {
 		);
 
 		this.offsets.meetingHud[0] = meetingHud;
-		this.offsets.exiledPlayerId[1] = meetingHud;
+		this.offsets.exiledPlayerId[0] = meetingHud;
 
 		this.offsets.allPlayersPtr[0] = gameData;
 		this.offsets.innerNetClient[0] = innerNetClient;
